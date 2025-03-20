@@ -1,0 +1,33 @@
+<script>
+const games = [];
+
+let times = 0;
+let toParse;
+let hasNext;
+do {
+    hasNext = false;
+    if(times===0) {
+        const input = prompt("Enter the first JSON to parse: ");
+        toParse = JSON.parse(input).contents.twoColumnBrowseResultsRenderer.tabs[1].tabRenderer.content.richGridRenderer.contents;
+    } else {
+        const continuation = prompt("Enter the next JSON to parse: ");
+        toParse = JSON.parse(continuation).onResponseReceivedActions[0].appendContinuationItemsAction.continuationItems;
+    }
+    for(const item of toParse) {
+        if(item.continuationItemRenderer) {
+            hasNext = true;
+        }
+        if(!item.richItemRenderer) {
+            continue;
+        }
+        const game = item.richItemRenderer.content.miniGameCardViewModel;
+        games.push(game);
+    }
+    times++;
+} while(hasNext);
+
+alert("Done! Check the console for the result.");
+console.log(JSON.stringify(games));
+
+
+</script>
